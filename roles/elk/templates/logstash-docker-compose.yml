@@ -1,0 +1,9 @@
+version: '2'
+services:
+  logstash:
+    image: go-nexus:5000/elk/logstash:5.1.2
+    restart: always
+    volumes:
+      - "./logstash.conf:/conf/logstash.conf"
+    ports:
+      - "5044:5044"

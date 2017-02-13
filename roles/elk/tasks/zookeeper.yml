@@ -1,0 +1,24 @@
+---
+- name: "be sure /opt/zookeeper"
+  file: path=/opt/zookeeper state=directory
+- name: "clean /data/zookeeper/data"
+  shell: "rm -rf /data/zookeeper/data"
+  ignore_errors: true
+- name: "be sure data dir"
+  file: path="{{item}}" state=directory
+  with_items:
+    - /data/zookeeper/data
+    - /data/zookeeper/log
+
+- name: "upload zookeeper docker-compose file"
+  template: src=zookeeper-docker-compose.yml dest=/opt/zookeeper/docker-compose.yml
+
+- name: "install zookeeper service"
+  copy: src=zookeeper.service dest=/etc/systemd/system/zookeeper.service
+
+- name: start zookeeper service
+  systemd:
+    name: zookeeper
+    daemon_reload: yes
+    state: restarted
+    enabled: yes

@@ -1,0 +1,19 @@
+---
+- name: "Make sure /opt/logstash"
+  file: path=/opt/logstash state=directory
+
+- name: "upload logstash config file"
+  template: src=logstash.conf dest=/opt/logstash/
+
+- name: "upload logstash docker-compose file"
+  template: src=logstash-docker-compose.yml dest=/opt/logstash/docker-compose.yml
+
+- name: "install logstash service"
+  copy: src=logstash.service dest=/etc/systemd/system/logstash.service
+
+- name: start logstash service
+  systemd:
+    name: logstash
+    daemon_reload: yes
+    state: restarted
+    enabled: yes

@@ -1,0 +1,15 @@
+version: '2'
+services:
+    zookeeper:
+        image: go-nexus:5000/elk/zookeeper:3.4.9
+        restart: always
+        privileged: true
+        network_mode: 'host'
+        volumes:
+            - "/data/zookeeper/data:/data"
+            - "/data/zookeeper/log:/datalog"
+        environment:
+            ZOO_MY_ID: {{groups.zookeeper.index(ansible_ssh_host)+1}}
+            ZOO_SERVERS: {% for h in groups["zookeeper"] %}server.{{ groups.zookeeper.index(h)+1 }}={%if ansible_ssh_host==h%}0.0.0.0{%else%}{{h}}{%endif%}:2882:3882 {% endfor %}
+
+            ZOO_PORT: 2182

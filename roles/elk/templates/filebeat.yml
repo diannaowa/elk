@@ -1,0 +1,53 @@
+filebeat:
+  prospectors:
+    - paths:
+        - "/data/gocd/logs/e2e/*.log"
+      document_type: e2e-log
+      multiline:
+        pattern: "^20[[:digit:]]{2}-[[:digit:]]{2}-[[:digit:]]{2} [[:digit:]]{2}:[[:digit:]]{2}:[[:digit:]]{2}"
+        negate: true
+        match: after
+      fields:
+        host_ip: {{ansible_ssh_host}}
+    - paths:
+        - "/data/gocd/logs/dev/*.log"
+      document_type: dev-log
+      multiline:
+        pattern: "^20[[:digit:]]{2}-[[:digit:]]{2}-[[:digit:]]{2} [[:digit:]]{2}:[[:digit:]]{2}:[[:digit:]]{2}"
+        negate: true
+        match: after
+      fields:
+        host_ip: {{ansible_ssh_host}}
+    - paths:
+        - "/data/gocd/logs/performance/*.log"
+      document_type: performance-log
+      multiline:
+        pattern: "^20[[:digit:]]{2}-[[:digit:]]{2}-[[:digit:]]{2} [[:digit:]]{2}:[[:digit:]]{2}:[[:digit:]]{2}"
+        negate: true
+        match: after
+      fields:
+        host_ip: {{ansible_ssh_host}}
+
+    - paths:
+        - "/data/gocd/logs/qa/*.log"
+      document_type: qa-log
+      multiline:
+        pattern: "^20[[:digit:]]{2}-[[:digit:]]{2}-[[:digit:]]{2} [[:digit:]]{2}:[[:digit:]]{2}:[[:digit:]]{2}"
+        negate: true
+        match: after
+      fields:
+        host_ip: {{ansible_ssh_host}}
+
+
+output.kafka:
+  # initial brokers for reading cluster metadata
+  hosts: [{%for h in groups['kafka']%} "{{h}}:9092"{% if not loop.last %}, {% endif %} {%endfor%}]
+
+  # message topic selection + partitioning
+  topic: '%{[type]}'
+  partition.round_robin:
+    reachable_only: false
+
+  required_acks: 1
+  compression: gzip
+  max_message_bytes: 1000000

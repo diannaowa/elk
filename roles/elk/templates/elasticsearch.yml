@@ -1,0 +1,13 @@
+http.host: 0.0.0.0
+transport.host: 0.0.0.0
+path:
+  logs: /var/log/elasticsearch
+cluster.name: gocd-elk
+node.name: ${HOSTNAME}
+node.max_local_storage_nodes: {{groups['elasticsearch-servers'] | length}}
+bootstrap.memory_lock: true
+discovery.zen.minimum_master_nodes: 1
+http.cors.enabled: true
+http.cors.allow-origin: "*"
+discovery.zen.ping.unicast.hosts: ['{{groups['elasticsearch-servers'] | join("','")}}']
+xpack.security.enabled: false

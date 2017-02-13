@@ -1,0 +1,16 @@
+[Unit]
+Description=logstash
+Requires=docker.service
+After=docker.target
+
+
+[Service]
+ExecStart=/usr/bin/docker-compose up
+ExecStop=/usr/bin/docker-compose down
+Type=simple
+Restart=always
+WorkingDirectory=/opt/logstash
+
+
+[Install]
+WantedBy=multi-user.target

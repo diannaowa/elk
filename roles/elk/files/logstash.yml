@@ -1,0 +1,46 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: logstash
+  labels:
+    app: logstash
+    version: v1
+spec:
+  template:
+    metadata:
+      labels:
+        name: logstash
+    spec:
+      hostPID: true
+      hostIPC: true
+      hostNetwork: true
+      containers:
+        - resources:
+            requests:
+              cpu: 0.15
+          securityContext:
+            privileged: true
+          image: go-nexus:5000/elk/logstash:5.1.2
+          imagePullPolicy: Always
+          name: logstash
+          volumeMounts:
+            - name: logstash-config
+              mountPath: /conf/
+              readOnly: true
+            - name: log-files
+              mountPath: /var/lib/docker/
+              readOnly: true
+            - name: tmp
+              mountPath: /tmp/
+      volumes:
+        - name: logstash-config
+          hostPath:
+              path: /opt/logstash/
+        - name: log-files
+          hostPath:
+              path: /var/lib/docker/
+        - name: tmp
+          hostPath:
+              path: /tmp
+      imagePullSecrets:
+         - name: go-nexus

@@ -1,0 +1,16 @@
+[Unit]
+Description=elasticsearch
+Requires=docker.service
+After=docker.target
+
+
+[Service]
+ExecStart=/usr/bin/docker-compose up
+ExecStop=/usr/bin/docker-compose down
+Type=simple
+Restart=always
+WorkingDirectory=/opt/elasticsearch
+
+
+[Install]
+WantedBy=multi-user.target

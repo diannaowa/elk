@@ -1,0 +1,16 @@
+[Unit]
+Description=kibana
+Requires=docker.service
+After=docker.target
+
+
+[Service]
+ExecStart=/usr/bin/docker-compose up
+ExecStop=/usr/bin/docker-compose down
+Type=simple
+Restart=always
+WorkingDirectory=/opt/kibana
+
+
+[Install]
+WantedBy=multi-user.target

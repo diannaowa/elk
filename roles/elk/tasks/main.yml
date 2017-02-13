@@ -1,0 +1,18 @@
+---
+  - include: zookeeper.yml
+    when: "'zookeeper' in group_names"
+
+  - include: kafka.yml
+    when: "'kafka' in group_names"
+
+  - include: logstash.yml
+    when: "'logstash' in group_names"
+
+  - include: kibana.yml
+    when: "'kibana' in group_names"
+
+  - include: elasticsearch.yml
+    when: "'elasticsearch-servers' in group_names"
+
+  - include: filebeat.yml
+    when: "'filebeat' in group_names"

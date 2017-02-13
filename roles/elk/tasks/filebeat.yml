@@ -1,0 +1,19 @@
+---
+- name: "Make sure /opt/filebeat"
+  file: path=/opt/filebeat state=directory
+
+- name: "upload filebeat config file"
+  template: src=filebeat.yml dest=/opt/filebeat/
+
+- name: "upload filebeat docker-compose file"
+  template: src=filebeat-docker-compose.yml dest=/opt/filebeat/docker-compose.yml
+
+- name: "install filebeat service"
+  copy: src=filebeat.service dest=/etc/systemd/system/filebeat.service
+
+- name: start filebeat service
+  systemd:
+    name: filebeat
+    daemon_reload: yes
+    state: restarted
+    enabled: yes

@@ -1,0 +1,23 @@
+---
+- name: "Make sure /opt/kafka"
+  file: path=/opt/kafka state=directory
+
+- name: "clean /data/kafka/data"
+  shell: "rm -rf /data/kafka/data"
+  ignore_errors: true
+
+- name: "Create kafka data and log dir"
+  file: path=/data/kafka/data state=directory
+
+- name: "upload kafka docker-compose file"
+  template: src=kafka-docker-compose.yml dest=/opt/kafka/docker-compose.yml
+
+- name: "install kafka service"
+  copy: src=kafka.service dest=/etc/systemd/system/kafka.service
+
+- name: start kafka service
+  systemd:
+    name: kafka
+    daemon_reload: yes
+    state: restarted
+    enabled: yes

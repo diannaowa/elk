@@ -1,0 +1,9 @@
+version: '2'
+services:
+  kibana:
+    image: go-nexus:5000/elk/kibana:5.1.2
+    restart: always
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_URL=http://{{groups['elasticsearch-servers'][0]}}:9200

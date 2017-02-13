@@ -1,0 +1,17 @@
+version: '2'
+services:
+  elasticsearch:
+    image: go-nexus:5000/elk/elasticsearch:5.1.2
+    restart: always
+    ulimits:
+      nproc: 2048
+      nofile: 65536
+      memlock: -1
+    volumes:
+      - "/data/elasticsearch/data:/usr/share/elasticsearch/data"
+      - "./config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml"
+      - "./config/log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties"
+      - "/data/elasticsearch/log:/var/log/elasticsearch"
+      - "/data/elasticsearch/plugins:/usr/share/elasticsearch/plugins"
+    network_mode: 'host'
+    privileged: true

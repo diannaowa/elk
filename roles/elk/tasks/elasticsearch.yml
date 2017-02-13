@@ -1,0 +1,36 @@
+---
+- name: "Make sure /opt/elasticsearch"
+  file: path=/opt/elasticsearch/config state=directory
+
+- name: "Create elasticsearch data and log dir"
+  file: path="{{item}}" state=directory
+  with_items:
+    - /data/elasticsearch/data
+    - /data/elasticsearch/log
+
+- name: "upload elasticsearch config file"
+  template: src="{{item}}" dest=/opt/elasticsearch/config/
+  with_items:
+    - elasticsearch.yml
+    - log4j2.properties
+
+- name: upload elasticsearch plugins
+  copy:
+    src: plugins
+    dest: "/data/elasticsearch"
+
+- name: "upload elasticsearch docker-compose file"
+  template: src=elasticsearch-docker-compose.yml dest=/opt/elasticsearch/docker-compose.yml
+
+- name: "install elasticsearch service"
+  copy: src=elasticsearch.service dest=/etc/systemd/system/elasticsearch.service
+
+- name: "set max_map_count"
+  shell: "sysctl -w vm.max_map_count=262144 && echo vm.max_map_count=262144 >> /etc/sysctl.conf && sysctl vm.max_map_count"
+
+- name: start elasticsearch service
+  systemd:
+    name: elasticsearch
+    daemon_reload: yes
+    state: restarted
+    enabled: yes
