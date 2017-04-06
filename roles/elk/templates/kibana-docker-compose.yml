@@ -1,7 +1,7 @@
 version: '2'
 services:
   kibana:
-    image: go-nexus:5000/elk/kibana:5.1.2
+    image: duizhang/kibana:5.1.2
     restart: always
     ports:
       - "5601:5601"
