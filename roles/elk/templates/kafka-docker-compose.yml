@@ -1,7 +1,7 @@
 version: '2'
 services:
   kafka:
-    image: go-nexus:5000/elk/kafka:0.10
+    image: duizhang/kafka:0.10
     restart: always
     volumes:
       - "/data/kafka/data:/opt/kafka/data"
