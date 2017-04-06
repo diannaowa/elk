@@ -1,7 +1,7 @@
 version: '2'
 services:
   elasticsearch:
-    image: go-nexus:5000/elk/elasticsearch:5.1.2
+    image: duizhang/elasticsearch:5.1.2
     restart: always
     ulimits:
       nproc: 2048
