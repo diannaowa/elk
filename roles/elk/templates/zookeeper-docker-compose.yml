@@ -1,7 +1,7 @@
 version: '2'
 services:
     zookeeper:
-        image: go-nexus:5000/elk/zookeeper:3.4.9
+        image: duizhang/zookeeper:3.4.9
         restart: always
         privileged: true
         network_mode: 'host'
