@@ -1,7 +1,7 @@
 version: '2'
 services:
   filebeat:
-    image: go-nexus:5000/elk/prima/filebeat:5.1.2
+    image: duizhang/filebeat:5.1.2
     restart: always
     volumes:
       - "/data/gocd/logs:/data/gocd/logs:ro"
